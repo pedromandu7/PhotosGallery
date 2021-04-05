@@ -6,37 +6,24 @@ import {
   View,
   StyleSheet,
   Button,
+  ImageBackground,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const GalleryScreen = ({navigation}) => {
+const GalleryScreen = ({navigation, imageURI}) => {
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          // Try setting `flexDirection` to `"row"`.
-          flexDirection: 'column',
-        },
-      ]}>
-      <View style={styles.topBar}></View>
-      <View style={{flex: 9, backgroundColor: ''}}>
-        <ScrollView>
-        </ScrollView>
-      </View>
-      <View style={{flex: 2, backgroundColor: 'darkgreen'}}></View>
+    <View style={styles.container}>
+      <ImageBackground style={{flex: 1}} source={{uri: imageURI}} />
+      <Button
+        onPress={() => navigation.goBack()}
+        title="back"
+        color="#841584"
+        accessibilityLabel="Learn more about this purple button"
+      />
     </View>
   );
 };
 const styles = StyleSheet.create({
-  topBar: {
-    flex: 1,
-    backgroundColor: 'pink',
-  },
-  viewCenter: {
-    flex: 4,
-    backgroundColor: 'red',
-  },
   container: {
     flex: 1,
   },

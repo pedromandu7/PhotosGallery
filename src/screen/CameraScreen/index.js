@@ -19,14 +19,14 @@ const CameraScreen = ({navigation}) => {
         styles.container,
         {
           // Try setting `flexDirection` to `"row"`.
-          flexDirection: 'column',
+          // flexDirection: 'row',
         },
       ]}>
-      <View style={{flex: 1, backgroundColor: 'red'}}>
+      <View style={styles.topBar}>
         <TopBarCameraComponent />
       </View>
 
-      <View style={{flex: 9}}>
+      <View style={styles.camera}>
         <CameraComponent />
       </View>
 
@@ -37,16 +37,16 @@ const CameraScreen = ({navigation}) => {
   );
 };
 const styles = StyleSheet.create({
-  viewCenter: {
-    flex: 4,
-    backgroundColor: 'red',
-  },
   container: {
     flex: 1,
   },
-  scroll: {
-    backgroundColor: 'red',
+  topBar: {
+    flex: 1,
   },
+  camera: {
+    flex: 9,
+  },
+  
 });
 
 export default CameraScreen;

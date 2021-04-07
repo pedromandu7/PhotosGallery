@@ -22,17 +22,18 @@ const PendingView = () => (
   <View
     style={{
       flex: 1,
-      backgroundColor: 'lightgreen',
+      backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
     }}>
-    <Text>Waiting...</Text>
+    <Text style={{color: 'black', fontSize: 30}}>Waiting...</Text>
   </View>
 );
 
 const CameraComponent = ({navigation}) => {
   const [imageUri, setImageUri] = useState(null);
-
+  const [constantsType, setConstantsType] = useState(null);
+  const [flash_Mode, setFlashMode] = useState(null);
   takePicture = async camera => {
     try {
       if (camera) {
@@ -81,64 +82,98 @@ const CameraComponent = ({navigation}) => {
           size={30}
           color="#fff"
           onPress={() => setImageUri(null)}
-          style={{marginRight:30}}
+          style={{marginRight: 30}}
         />
         <Icon
           name="check"
           size={30}
           color="#fff"
           onPress={() => savePicture()}
-          style={{marginLeft:30}}
+          style={{marginLeft: 30}}
         />
       </View>
     </ImageBackground>
   ) : (
     <View style={styles.container}>
-      <View style={styles.photo}>
-        <RNCamera
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.off}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}>
-          {({camera, status, recordAudioPermissionStatus}) => {
-            if (status !== 'READY') return <PendingView />;
-            return (
-              <View
-                style={{
-                  flex: 0,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                }}>
-                <View style={styles.buttons}>
-                  <TouchableOpacity
-                    onPress={() => this.takePicture(camera)}
-                    style={styles.capture}>
-                    <Icon name="camera-alt" size={40} color={'#f37272'} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {
-                      cameraState = RNCamera.Constants.Type.front;
-                    }}>
-                    <Icon name="videocam" size={40} color={'#f37272'} />
-                  </TouchableOpacity>
-                </View>
+      <RNCamera
+        style={styles.rnCamera}
+        type={
+          constantsType === 'back'
+            ? RNCamera.Constants.Type.front
+            : RNCamera.Constants.Type.back
+        }
+        flashMode={
+          flash_Mode === 'on'
+            ? RNCamera.Constants.FlashMode.off
+            : RNCamera.Constants.FlashMode.on
+        }
+        androidCameraPermissionOptions={{
+          title: 'Permission to use camera',
+          message: 'We need your permission to use your camera',
+          buttonPositive: 'Okay',
+          buttonNegative: 'Cancel',
+        }}
+        androidRecordAudioPermissionOptions={{
+          title: 'Permission to use audio recording',
+          message: 'We need your permission to use your audio',
+          buttonPositive: 'Okay',
+          buttonNegative: 'Cancel',
+        }}>
+        {({camera, status, recordAudioPermissionStatus}) => {
+          if (status !== 'READY') return <PendingView />;
+          return (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'space-between',
+                // backgroundColor: 'red',
+              }}>
+              <View style={styles.topBar}>
+               
+                <TouchableOpacity
+                  onPress={() =>
+                    setConstantsType(
+                      constantsType == 'front' ? 'back' : 'front',
+                    )
+                  }
+                  style={styles.buttonTop}>
+                  <Icon name="flash-on" size={20} color={'#fff'} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  // onPress={() =>
+                    
+                  // }
+                  style={styles.buttonTop}>
+                  <Icon name="flip-camera-android" size={20} color={'#fff'} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  // onPress={() =>
+                  // }
+                  style={styles.buttonTop}>
+                  <Icon name="flip-camera-android" size={20} color={'#fff'} />
+                </TouchableOpacity>
               </View>
-            );
-          }}
-        </RNCamera>
-      </View>
+
+              <View style={styles.buttonsCamera}>
+                <TouchableOpacity
+                  onPress={() => this.takePicture(camera)}
+                  style={styles.button}>
+                  <Icon name="camera" size={60} color={'#fff'} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  // onPress={() =>
+                    
+                  // }
+                  style={styles.button}>
+                  <Icon name="flip-camera-android" size={50} color={'#fff'} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          );
+        }}
+      </RNCamera>
     </View>
   );
 };
@@ -147,6 +182,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f37272',
+    alignSelf: 'center',
   },
   logo: {
     alignSelf: 'center',
@@ -154,54 +190,54 @@ const styles = StyleSheet.create({
     maxHeight: 50,
     maxWidth: 50,
   },
-  photo: {
-    width: 300,
-    height: 400,
-    backgroundColor: '#fff',
-    alignSelf: 'center',
-    marginTop: 30,
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
   },
-  buttons: {
+  buttonsCamera: {
     marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     margin: 20,
     borderRadius: 150,
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
+    opacity: 0.5,
   },
-  preview: {
+  buttonTop: {
+    backgroundColor: '#000',
+    margin: 20,
+    borderRadius: 150,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: 0.5,
+  },
+
+  rnCamera: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
-  },
   previewPhoto: {
+    //não mexe
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   buttonsPreview: {
     flexDirection: 'row',
-    justifyContent:  'space-between',
+    justifyContent: 'space-between',
     padding: 10,
-    
-            
-            marginEnd: 10,
-            marginStart: 10,
+    marginEnd: 10,
+    marginStart: 10,
   },
 });
 

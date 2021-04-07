@@ -19,7 +19,7 @@ const CameraScreen = ({navigation}) => {
         styles.container,
         {
           // Try setting `flexDirection` to `"row"`.
-          // flexDirection: 'row',
+       //   flexDirection: 'row',
         },
       ]}>
       <View style={styles.topBar}>

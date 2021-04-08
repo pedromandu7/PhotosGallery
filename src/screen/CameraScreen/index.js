@@ -22,9 +22,9 @@ const CameraScreen = ({navigation}) => {
        //   flexDirection: 'row',
         },
       ]}>
-      <View style={styles.topBar}>
+      {/* <View style={styles.topBar}>
         <TopBarCameraComponent />
-      </View>
+      </View> */}
 
       <View style={styles.camera}>
         <CameraComponent />

@@ -1,3 +1,4 @@
+// 94981157928;
 import React from 'react';
 import {useState} from 'react';
 import {
@@ -10,30 +11,25 @@ import {
   Image,
   ImageBackground,
   PermissionsAndroid,
-  Platform,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import CameraRoll from '@react-native-community/cameraroll';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import RNFS from 'react-native-fs';
-
-const PendingView = () => (
-  <View
-    style={{
-      flex: 1,
-      backgroundColor: 'white',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
-    <Text style={{color: 'black', fontSize: 30}}>Waiting...</Text>
-  </View>
-);
+import PendingView from '../PendingView';
+import SavePicture from '../../utils/SavePicture';
+import ShowFlash from '../Elements/Flash';
+import ShowTimer from '../Elements/Timer';
+import ButtonFlash from '../Elements/Button/ButtonFlash';
+import ButtonTime from '../Elements/Button/ButtonTimer';
 
 const CameraComponent = ({navigation}) => {
   const [imageUri, setImageUri] = useState(null);
   const [constantsType, setConstantsType] = useState(null);
-  const [flash_Mode, setFlashMode] = useState(null);
+  const [flash_Mode, setFlash_Mode] = useState(null);
+  const [showFlash_Modes, setShowFlashMode] = useState(false);
+  const [showTimer, setShowTimer] = useState(null);
+  const [timer, setTimer] = useState(null);
   takePicture = async camera => {
     try {
       if (camera) {
@@ -51,28 +47,6 @@ const CameraComponent = ({navigation}) => {
       alert('deu ruim ' + err.message);
     }
   };
-  savePicture = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Access Storage',
-          message: 'Access Storage for the pictures',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        CameraRoll.save(imageUri, 'photo').then(result => {
-          console.log(result + '  agora sim cuzão!');
-          setImageUri(null);
-        }); //felicidade é o que sinto agora!
-      } else {
-        alert("don't have camera permission.");
-      }
-    } catch (err) {
-      console.warn(err + ' deu ruim cuzão!');
-    }
-    setImageUri(null);
-  };
 
   return imageUri ? (
     <ImageBackground style={styles.previewPhoto} source={{uri: imageUri}}>
@@ -88,7 +62,7 @@ const CameraComponent = ({navigation}) => {
           name="check"
           size={30}
           color="#fff"
-          onPress={() => savePicture()}
+          onPress={() => SavePicture(imageUri).then(() => setImageUri(null))}
           style={{marginLeft: 30}}
         />
       </View>
@@ -104,8 +78,12 @@ const CameraComponent = ({navigation}) => {
         }
         flashMode={
           flash_Mode === 'on'
-            ? RNCamera.Constants.FlashMode.off
-            : RNCamera.Constants.FlashMode.on
+            ? RNCamera.Constants.FlashMode.on
+            : flash_Mode === 'auto'
+            ? RNCamera.Constants.FlashMode.auto
+            : flash_Mode === 'torch'
+            ? RNCamera.Constants.FlashMode.torch
+            : RNCamera.Constants.FlashMode.off
         }
         androidCameraPermissionOptions={{
           title: 'Permission to use camera',
@@ -126,34 +104,35 @@ const CameraComponent = ({navigation}) => {
               style={{
                 flex: 1,
                 justifyContent: 'space-between',
-                // backgroundColor: 'red',
               }}>
               <View style={styles.topBar}>
-               
-                <TouchableOpacity
-                  onPress={() =>
-                    setConstantsType(
-                      constantsType == 'front' ? 'back' : 'front',
-                    )
-                  }
-                  style={styles.buttonTop}>
-                  <Icon name="flash-on" size={20} color={'#fff'} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  // onPress={() =>
-                    
-                  // }
-                  style={styles.buttonTop}>
-                  <Icon name="flip-camera-android" size={20} color={'#fff'} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  // onPress={() =>
-                  // }
-                  style={styles.buttonTop}>
-                  <Icon name="flip-camera-android" size={20} color={'#fff'} />
-                </TouchableOpacity>
+                {showFlash_Modes == true ? (
+                  <ShowFlash
+                    onHide={() => setShowFlashMode(false)}
+                    flashOn={() => setFlash_Mode('on')}
+                    flashOff={() => setFlash_Mode('off')}
+                    flashAuto={() => setFlash_Mode('auto')}
+                    flashTorch={() => setFlash_Mode('torch')}
+                  />
+                ) : showTimer == true ? (
+                  <ShowTimer
+                    onHide={() => setShowTimer(false)}
+                    timer={() => setTimer(null)}
+                    timer3={() => setTimer(true)}
+                    timer10={() => setTimer(false)}
+                  />
+                ) : (
+                  <View style={styles.topBar}>
+                    <ButtonFlash
+                      onHide={() => setShowFlashMode(true)}
+                      flashName={flash_Mode}
+                    />
+                    <ButtonTime
+                      onHide={() => setShowTimer(true)}
+                      timer={timer}
+                    />
+                  </View>
+                )}
               </View>
 
               <View style={styles.buttonsCamera}>
@@ -163,9 +142,11 @@ const CameraComponent = ({navigation}) => {
                   <Icon name="camera" size={60} color={'#fff'} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  // onPress={() =>
-                    
-                  // }
+                  onPress={() =>
+                    setConstantsType(
+                      constantsType == 'front' ? 'back' : 'front',
+                    )
+                  }
                   style={styles.button}>
                   <Icon name="flip-camera-android" size={50} color={'#fff'} />
                 </TouchableOpacity>
@@ -192,8 +173,8 @@ const styles = StyleSheet.create({
   },
   topBar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonsCamera: {
     marginTop: 10,
@@ -210,17 +191,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     opacity: 0.5,
   },
-  buttonTop: {
-    backgroundColor: '#000',
-    margin: 20,
-    borderRadius: 150,
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    opacity: 0.5,
-  },
-
   rnCamera: {
     flex: 1,
     justifyContent: 'flex-end',

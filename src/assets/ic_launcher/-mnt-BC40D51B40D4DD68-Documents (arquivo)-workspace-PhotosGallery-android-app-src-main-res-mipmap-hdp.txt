@@ -1,0 +1,5 @@
+/mnt/BC40D51B40D4DD68/Documents (arquivo)/workspace/PhotosGallery/android/app/src/main/res/mipmap-hdpi
+/mnt/BC40D51B40D4DD68/Documents (arquivo)/workspace/PhotosGallery/android/app/src/main/res/mipmap-mdpi
+/mnt/BC40D51B40D4DD68/Documents (arquivo)/workspace/PhotosGallery/android/app/src/main/res/mipmap-xhdpi
+/mnt/BC40D51B40D4DD68/Documents (arquivo)/workspace/PhotosGallery/android/app/src/main/res/mipmap-xxhdpi
+/mnt/BC40D51B40D4DD68/Documents (arquivo)/workspace/PhotosGallery/android/app/src/main/res/mipmap-xxxhdpi

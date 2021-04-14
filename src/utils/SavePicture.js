@@ -17,7 +17,7 @@ const SavePicture = async (imageUri) => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CameraRoll.save(imageUri, 'photo').then(result => {
-          console.log(result + '  ai sim cuzão!');
+          console.log('Imagem Armazenada!');
         }); 
       } else {
         alert("don't have camera permission.");
@@ -27,5 +27,4 @@ const SavePicture = async (imageUri) => {
     }
     // setImageUri(null);
   };
-
 export default SavePicture;

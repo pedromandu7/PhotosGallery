@@ -8,9 +8,9 @@ const ButtonTime = ({timer, onHide}) => {
     <TouchableOpacity
       onPress={() => onHide()}
       style={[styles.buttonFlash, {width: 30, height: 30}]}>
-      {timer ? (
+      {timer === 3000 ? (
         <Icon name="timer-3" size={20} color={'#fff'} />
-      ) : timer == false ? (
+      ) : timer === 7000 ? (
         <Icon name="timer-10" size={20} color={'#fff'} />
       ) : (
         <Icon name="timer" size={20} color={'#fff'} />

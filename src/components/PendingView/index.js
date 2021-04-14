@@ -1,28 +1,24 @@
 import React from 'react';
 import {useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 
 const PendingView = ({navigation}) => {
- 
-  return  (
+  return (
     <View
-    style={{
-      flex: 1,
-      backgroundColor: 'white',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
-    <Text style={{color: 'black', fontSize: 30}}>Waiting...</Text>
-  </View>
+      style={{
+        flex: 1,
+        backgroundColor: 'black',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+      }}>
+      <Text style={{color: 'white', fontSize: 30, width: '100%'}}>
+        Waiting...
+      </Text>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  
-});
+const styles = StyleSheet.create({});
 
 export default PendingView;

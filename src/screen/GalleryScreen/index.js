@@ -1,31 +1,37 @@
-import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-  StyleSheet,
-  Button,
-  ImageBackground,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, {useRef} from 'react';
+import {Animated, Text, View, StyleSheet, Button} from 'react-native';
 
-const GalleryScreen = ({navigation, imageURI}) => {
+const GalleryScreen = () => {
+  const [visible, setVisible] = useState(true);
+
+  // inicia com value 0
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
   return (
-    <View style={styles.container}>
-      <ImageBackground style={{flex: 1}} source={{uri: imageURI}} />
-      <Button
-        onPress={() => navigation.goBack()}
-        title="back"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    </View>
+    <Text>arroz</Text>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fadingContainer: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    // backgroundColor: "powderblue"
+  },
+  fadingText: {
+    fontSize: 28,
+    textAlign: 'center',
+    margin: 10,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    marginVertical: 16,
   },
 });
+
 export default GalleryScreen;

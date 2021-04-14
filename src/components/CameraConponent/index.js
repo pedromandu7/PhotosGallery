@@ -1,4 +1,3 @@
-// 94981157928;
 import React from 'react';
 import {useState} from 'react';
 import {
@@ -29,7 +28,9 @@ const CameraComponent = ({navigation}) => {
   const [flash_Mode, setFlash_Mode] = useState(null);
   const [showFlash_Modes, setShowFlashMode] = useState(false);
   const [showTimer, setShowTimer] = useState(null);
-  const [timer, setTimer] = useState(null);
+  const [timer, setTimer] = useState(0);
+  const [loading, setLoading] = useState(true);
+
   takePicture = async camera => {
     try {
       if (camera) {
@@ -98,7 +99,15 @@ const CameraComponent = ({navigation}) => {
           buttonNegative: 'Cancel',
         }}>
         {({camera, status, recordAudioPermissionStatus}) => {
-          if (status !== 'READY') return <PendingView />;
+          if (status !== 'READY') {
+            return <PendingView />;
+          }
+          // console.log('status');
+          // console.log(status);
+
+          // return setTimeout(() => alert ("timeout called"), 3000);
+          // && (loading == true)
+
           return (
             <View
               style={{
@@ -117,9 +126,18 @@ const CameraComponent = ({navigation}) => {
                 ) : showTimer == true ? (
                   <ShowTimer
                     onHide={() => setShowTimer(false)}
-                    timer={() => setTimer(null)}
-                    timer3={() => setTimer(true)}
-                    timer10={() => setTimer(false)}
+                    timer={() => {
+                      setTimer(0);
+                      console.log(timer);
+                    }}
+                    timer3={() => {
+                      setTimer(3000);
+                      console.log(timer);
+                    }}
+                    timer10={() => {
+                      setTimer(7000);
+                      console.log(timer);
+                    }}
                   />
                 ) : (
                   <View style={styles.topBar}>
@@ -136,20 +154,23 @@ const CameraComponent = ({navigation}) => {
               </View>
 
               <View style={styles.buttonsCamera}>
-                <TouchableOpacity
-                  onPress={() => this.takePicture(camera)}
-                  style={styles.button}>
-                  <Icon name="camera" size={60} color={'#fff'} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    setConstantsType(
-                      constantsType == 'front' ? 'back' : 'front',
-                    )
-                  }
-                  style={styles.button}>
-                  <Icon name="flip-camera-android" size={50} color={'#fff'} />
-                </TouchableOpacity>
+                <View style={styles.buttonsCamera}>
+                  <TouchableOpacity
+                    onPress={() => this.takePicture(camera)}
+                    style={styles.button}>
+                    <Icon name="camera" size={60} color={'#fff'} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      setConstantsType(
+                        constantsType == 'front' ? 'back' : 'front',
+                      )
+                    }
+                    style={styles.button}>
+                    <Icon name="flip-camera-android" size={50} color={'#fff'} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           );
@@ -161,6 +182,7 @@ const CameraComponent = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
+    // position: 'absolute',//para testar se ocupa a tela toda
     flex: 1,
     backgroundColor: '#f37272',
     alignSelf: 'center',
@@ -175,11 +197,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
-  buttonsCamera: {
-    marginTop: 10,
+  buttonsTopBar: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'darkblue',
+    width: '100%',
+  },
+  buttonsCamera: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   button: {
     backgroundColor: '#000',
@@ -197,7 +228,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   previewPhoto: {
-    //não mexe
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
